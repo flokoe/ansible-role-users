@@ -1,0 +1,21 @@
+---
+
+galaxy_info:
+  author: Florian Köhler
+  description: Ansible role to manage users, groups, authorized keys and sudo entries.
+
+  license: MIT
+
+  min_ansible_version: 2.10
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+
+  galaxy_tags:
+    - system
+    - user
+    - users
+
+dependencies: []
