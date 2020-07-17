@@ -1,0 +1,26 @@
+---
+
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+lint: |
+  set -e
+  yamllint --strict .
+  ansible-lint
+
+platforms:
+  - name: instance
+    image: ubuntu:bionic
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      stdout_callback: yaml
+
+verifier:
+  name: ansible

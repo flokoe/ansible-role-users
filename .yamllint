@@ -1,0 +1,22 @@
+---
+# Based on ansible-lint config
+extends: default
+
+ignore: |
+  env
+
+rules:
+  colons:
+    max-spaces-after: -1
+    level: error
+  empty-lines:
+    max: 2
+    level: error
+  line-length:
+    max: 100
+  truthy:
+    allowed-values:
+      - 'true'
+      - 'false'
+      - 'yes'
+      - 'no'

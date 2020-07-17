@@ -1,0 +1,9 @@
+---
+
+- name: Converge default
+  hosts: all
+
+  tasks:
+    - name: "Import flokoe.users "
+      import_role:
+        name: flokoe.users
