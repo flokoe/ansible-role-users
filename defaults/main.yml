@@ -1,0 +1,33 @@
+---
+# defaults file for flokoe.users
+
+# Set to true if you want to use a global users group as primary users group
+# instead of creating an individual primary group for each user (same name as username).
+use_global_users_group: false
+
+# Define global users group
+users_group:
+  name: users
+
+# Default behavior of 'append' is to uses groups from 'groups' exclusively.
+# If 'keep_existing_groups' is falses this setting can still be set individually.
+# Global setting to keep existing groups:
+keep_existing_groups: false
+
+# Default home base path
+home_base_path: /home/
+
+# Default shell
+default_shell: /bin/bash
+
+# Default ssh key bits
+default_ssh_key_bits: 2048
+
+# Default ssh key type
+default_ssh_key_type: rsa
+
+# List of groups to manage
+group_list: []
+
+# List of users to manage
+user_list: []
