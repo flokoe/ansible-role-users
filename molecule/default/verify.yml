@@ -78,11 +78,9 @@
 
     - name: Check content of public ssh key for user4
       command: cat /home/user4/.ssh/id_rsa.pub
-      register: publilc_ssh_out
+      register: public_ssh_out
       changed_when: false
-      failed_when:
-        - "'ssh-rsa' not in publilc_ssh_out.stdout"
-        - "'ansible-generated for user4 on instance' not in publilc_ssh_out.stdout"
+      failed_when: "'ansible-generated for user4 on instance' not in public_ssh_out.stdout"
 
     - name: Get output of 'ssh-keygen' for '/home/user4/.ssh/id_rsa'
       command: ssh-keygen -l -f /home/user4/.ssh/id_rsa
