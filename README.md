@@ -27,9 +27,104 @@ Using `requirements.yml`:
 
 None
 
-## Role Variables
+## Role Configuration
 
-### Example config
+| Parameter                | Defaults    | Description                                                                                                                                                               |
+| ------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_global_users_group` | `false`     | Set to true if you want to use a global users group as primary users group instead of creating an individual primary group for each user (same name as username).         |
+| `users_group.name`       | `users`     | Name of global users group                                                                                                                                                |
+| `users_group.gid`        | None        | GID of global users group. Don't change this blindly                                                                                                                      |
+| `keep_existing_groups`   | `false`     | Default behavior of 'append' is to use groups from 'groups' exclusively. Set to true to keep existing groups. If set to false this setting can still be set individually. |
+| `home_base_path`         | `/home/`    | Home base directory                                                                                                                                                       |
+| `default_shell`          | `/bin/bash` | Default shell                                                                                                                                                             |
+| `default_ssh_key_bits`   | `2048`      | Default SSH key bits                                                                                                                                                      |
+| `default_ssh_key_type`   | `rsa`       | Default SSH key type                                                                                                                                                      |
+| `skeleton_path`          | None        | Home skeleton directory                                                                                                                                                   |
+
+### Managing groups
+
+Add a `group_list` variable containing the list of groups to add.
+
+The following variables can be used to create a group:
+
+| Parameter         | Defaults  | Description                                                     |
+| ----------------- | --------- | --------------------------------------------------------------- |
+| `name` *required* | None      | Name of group to create                                         |
+| `gid`             | None      | Group ID, will be determined automatically if omitted           |
+| `state`           | `present` | State of the group. Set to `absent` to remove group from system |
+
+#### Group example
+
+```yaml
+group_list:
+  - name: group1
+    gid: 1337
+    state: absent
+```
+
+### Managing users
+
+Add a `user_list` variable containing the list of users to add.
+<!-- A good place to put this is in group_vars/all or group_vars/groupname if you only want the users to be on certain machines. -->
+
+The following variables can be used to create a user:
+
+| Parameter            | Defaults                                   | Description                                                                                                                                                                       |
+| -------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name` *required*    | None                                       | The username                                                                                                                                                                      |
+| `comment`            | None                                       | The full name or description of the User (GECOS field)                                                                                                                            |
+| `uid`                | None                                       | User ID, will be determined automatically if omitted                                                                                                                              |
+| `group`              | `name`                                     | Primary group of user. Will use `name` of user by default. Uses `users_group.name` if `use_global_users_group` is set to true                                                     |
+| `groups`             | None                                       | List of groups the user should be added to                                                                                                                                        |
+| `append`             | `false`                                    | Use groups in `groups` exclusively. Set to true to keep existing groups. See `keep_existing_groups` for global setting                                                            |
+| `home`               | `home_base_path + name`                    | Path to home directory of user                                                                                                                                                    |
+| `create_home`        | `true`                                     | Create home directory                                                                                                                                                             |
+| `move_home`          | `false`                                    | Attempt to move the user's old home directory to the specified directory if it isn't there already and the old home exists.                                                       |
+| `skeleton`           | None                                       | Home skeleton directory. Uses `skeleton_path` if defined                                                                                                                          |
+| `password`           | None                                       | Password of User. Needs to be an encrypted value                                                                                                                                  |
+| `non_unique`         | `false`                                    | Allow non unique UIDs                                                                                                                                                             |
+| `expires`            | None                                       | An expiry time for the user in epoch. You can remove the expiry time by specifying a negative value.                                                                              |
+| `shell`              | `default_shell`                            | Sets shell of user. Uses shell specified in `default_shell` by default                                                                                                            |
+| `generate_ssh_key`   | `false`                                    | Generate private SSH key for user                                                                                                                                                 |
+| `ssh_key_bits`       | `default_ssh_key_bits`                     | Sets bit length for SSH key. Uses value specified in `default_ssh_key_bits` by default                                                                                            |
+| `ssh_key_passphrase` | None                                       | Sets password for SSH key. If left blank, SSH key will have no password                                                                                                           |
+| `ssh_key_type`       | `default_ssh_key_type`                     | Sets key type of SSH key.  Uses value specified in `default_ssh_key_type` by default                                                                                              |
+| `ssh_key_comment`    | `ansible-generated for $USER on $HOSTNAME` | Sets comment for SSH key                                                                                                                                                          |
+| `system`             | `false`                                    | When creating an account makes the user a system account. This setting cannot be changed on existing users                                                                        |
+| `remove`             | `false`                                    | This only affects `state=absent`, removes home directory and mail spool                                                                                                           |
+| `force`              | `false`                                    | This only affects `state=absent`, it forces removal of the user and associated directories. When used with `generate_ssh_key=true` this forces an existing key to be overwritten. |
+| `state`              | `present`                                  | Defines the state of the user. Use `absent` to remove user from system                                                                                                            |
+
+### User example
+
+```yaml
+user_list:
+  - name: hjanmaat
+    comment: Hein Janmaat
+    uid: 1337
+    group: hjanmaat
+    groups:
+      - developers
+      - adm
+    append: true
+    home: /home/hjanmaat
+    create_home: true
+    move_home: false
+    skeleton: local_skeleton_dir
+    password: '$6$mysecretsalt$qJbapG68nyRab3gxvKWPUcs2g3t0oMHSHMnSKecYNpSi3CuZm.GbBqXO8BE6EI6P1JUefhA0qvD7b5LSh./PU1'
+    non_unique: false
+    expires: 31556926
+    shell: /bin/bash
+    generate_ssh_key: true
+    ssh_key_bits: 4096
+    ssh_key_passphrase: very_secret_secret
+    ssh_key_type: rsa
+    ssh_key_comment: a comment for ssh key
+    system: false
+    remove: false
+    force: false
+    state: present
+```
 
 ## Dependencies
 
