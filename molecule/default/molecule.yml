@@ -13,7 +13,7 @@ lint: |
 
 platforms:
   - name: instance
-    image: ubuntu:bionic
+    image: geerlingguy/docker-ubuntu1804-ansible
     pre_build_image: true
 
 provisioner:
