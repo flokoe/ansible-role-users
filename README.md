@@ -111,7 +111,8 @@ user_list:
     create_home: true
     move_home: false
     skeleton: local_skeleton_dir
-    password: '$6$mysecretsalt$qJbapG68nyRab3gxvKWPUcs2g3t0oMHSHMnSKecYNpSi3CuZm.GbBqXO8BE6EI6P1JUefhA0qvD7b5LSh./PU1'
+    password: >-
+      $6$mysecretsalt$qJbapG68nyRab3gxvKWPUcs2g3t0oMHSHMnSKecYNpSi3CuZm.GbBqXO8BE6EI6P1JUefhA0qvD7b5LSh./PU1
     non_unique: false
     expires: 31556926
     shell: /bin/bash
