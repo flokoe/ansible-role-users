@@ -1,0 +1,44 @@
+---
+# tasks file for flokoe.users
+
+- name: Create global 'users_group'
+  when: use_global_users_group
+  group:
+    name: "{{ users_group.name }}"
+    gid: "{{ users_group.gid | default(omit) }}"
+    state: present
+
+- name: Create groups
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ group_list }}"
+
+- name: Create users
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default(omit) }}"
+    uid: "{{ item.uid | default(omit) }}"
+    group: "{{ item.group | default(users_group.name if use_global_users_group else omit) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    append: "{{ item.append | default(true if keep_existing_groups else omit) }}"
+    home: "{{ item.home | default(home_base_path + item.name) }}"
+    create_home: "{{ item.create_home | default(omit) }}"
+    move_home: "{{ item.move_home | default(omit) }}"
+    skeleton: "{{ item.skeleton | default(skeleton_path if skeleton_path is defined else omit) }}"
+    password: "{{ item.password | default(omit) }}"
+    non_unique: "{{ item.non_unique | default(omit) }}"
+    expires: "{{ item.expires | default(omit) }}"
+    shell: "{{ item.shell | default(default_shell) }}"
+    generate_ssh_key: "{{ item.generate_ssh_key | default(omit) }}"
+    ssh_key_bits: "{{ item.ssh_key_bits | default(default_ssh_key_bits) }}"
+    ssh_key_passphrase: "{{ item.ssh_key_passphrase | default(omit) }}"
+    ssh_key_type: "{{ item.ssh_key_type | default(default_ssh_key_type) }}"
+    ssh_key_comment: >
+      {{ item.ssh_key_comment | default("ansible-generated for " + item.name + " on $HOSTNAME") }}
+    system: "{{ item.system | default(omit) }}"
+    remove: "{{ item.remove | default(omit) }}"
+    force: "{{ item.force | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ user_list }}"
