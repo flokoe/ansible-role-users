@@ -1,0 +1,32 @@
+---
+
+- name: Prepare default
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        cache_valid_time: 7200
+
+    - name: Install 'openssh-client' package
+      apt:
+        name: openssh-client
+        state: present
+
+    - name: Add 'foo' user
+      user:
+        name: foo
+        state: present
+
+    - name: Add 'group1'
+      group:
+        name: group1
+        state: present
+
+    - name: Add 'user2' with group
+      user:
+        name: user2
+        groups: group1
+        state: present
