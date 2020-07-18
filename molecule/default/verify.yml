@@ -4,6 +4,118 @@
   hosts: all
 
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+    - name: Check if 'users_group' exists
+      group:
+        name: users
+        state: present
+      register: users_group_out
+      failed_when: users_group_out.changed
+      check_mode: true
+
+    - name: Check if group creation works
+      group:
+        name: group2
+        gid: 1991
+        state: present
+      register: group_out
+      failed_when: group_out.changed
+      check_mode: true
+
+    - name: Check if user with minimal config and defaults exists
+      user:
+        name: hjanmaat
+        comment: Hein Janmaat
+        group: hjanmaat
+        home: /home/hjanmaat
+        shell: /bin/bash
+        state: present
+      register: min_config_out
+      failed_when: min_config_out.changed
+      check_mode: true
+
+    - name: Check if setting uid and 'users_group' works
+      user:
+        name: user1
+        uid: 1337
+        group: users
+        state: present
+      register: uid_out
+      failed_when: uid_out.changed
+      check_mode: true
+
+    - name: Check if existing groups are kept
+      user:
+        name: user2
+        groups:
+          - group1
+          - group2
+        state: present
+      register: existing_groups_out
+      failed_when: existing_groups_out.changed
+      check_mode: true
+
+    - name: Check if password and non unique uid works
+      user:
+        name: user3
+        uid: 33
+        password: >-
+          $6$mysecretsalt$qJbapG68nyRab3gxvKWPUcs2g3t0oMHSHMnSKecYNpSi3CuZm.GbBqXO8BE6EI6P1JUefhA0qvD7b5LSh./PU1
+        state: present
+      register: pass_out
+      failed_when: pass_out.changed
+      check_mode: true
+
+    - name: Check if generated ssh key for user4 exists
+      file:
+        group: user4
+        mode: 0600
+        owner: user4
+        path: /home/user4/.ssh/id_rsa
+        state: file
+      register: ssh_out
+      failed_when: ssh_out.changed
+      check_mode: true
+
+    - name: Check content of public ssh key for user4
+      command: cat /home/user4/.ssh/id_rsa.pub
+      register: publilc_ssh_out
+      changed_when: false
+      failed_when:
+        - "'ssh-rsa' not in publilc_ssh_out.stdout"
+        - "'ansible-generated for user4 on instance' not in publilc_ssh_out.stdout"
+
+    - name: Get output of 'ssh-keygen' for '/home/user4/.ssh/id_rsa'
+      command: ssh-keygen -l -f /home/user4/.ssh/id_rsa
+      register: ssh_keygen_out
+      changed_when: false
+
+    - name: Check if bits and type of ssh key for user4 are correct
+      assert:
+        that:
+          - "'2048' in ssh_keygen_out.stdout"
+          - "'RSA' in ssh_keygen_out.stdout"
+
+    - name: Get id output for system_user1
+      command: id -u system_user1
+      register: id_out
+      changed_when: false
+
+    - name: Check if creation of system user was successful
+      assert:
+        that: id_out.stdout | int < 1000
+
+    - name: Check if user 'foo' is absent
+      user:
+        name: foo
+        state: absent
+      register: user_foo_out
+      failed_when: user_foo_out.changed
+      check_mode: true
+
+    - name: Check if home dir of 'foo' is absent
+      file:
+        path: /home/foo
+        state: absent
+      register: home_absent_out
+      failed_when: home_absent_out.changed
+      check_mode: true
