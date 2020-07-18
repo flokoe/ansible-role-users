@@ -3,7 +3,42 @@
 - name: Converge default
   hosts: all
 
-  tasks:
-    - name: "Import flokoe.users "
-      import_role:
-        name: flokoe.users
+  vars:
+    group_list:
+      - name: group2
+        gid: 1991
+
+    user_list:
+      - name: hjanmaat
+        comment: Hein Janmaat
+      - name: user3
+        non_unique: true
+        uid: 33
+        password: >-
+          $6$mysecretsalt$qJbapG68nyRab3gxvKWPUcs2g3t0oMHSHMnSKecYNpSi3CuZm.GbBqXO8BE6EI6P1JUefhA0qvD7b5LSh./PU1
+      - name: user4
+        generate_ssh_key: true
+      - name: system_user1
+        system: true
+      - name: foo
+        state: absent
+        remove: true
+
+  roles:
+    - role: flokoe.users
+
+- name: Converge default (with special vars)
+  hosts: all
+
+  vars:
+    use_global_users_group: true
+    keep_existing_groups: true
+    user_list:
+      - name: user1
+        uid: 1337
+      - name: user2
+        groups:
+          - group2
+
+  roles:
+    - role: flokoe.users
