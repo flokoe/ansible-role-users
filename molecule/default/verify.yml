@@ -117,3 +117,14 @@
       register: home_absent_out
       failed_when: home_absent_out.changed
       check_mode: true
+
+    - name: Check if home dir of 'user5' has correct permissions
+      file:
+        group: root
+        mode: 0700
+        owner: root
+        path: /home/user5
+        state: file
+      register: home_perm_out
+      failed_when: home_perm_out.changed
+      check_mode: true

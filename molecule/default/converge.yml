@@ -39,6 +39,10 @@
       - name: user2
         groups:
           - group2
+      - name: user5
+        home_mode: '700'
+        home_owner: root
+        home_group: root
 
   roles:
     - role: flokoe.users

@@ -26,6 +26,9 @@ default_ssh_key_bits: 2048
 # Default ssh key type
 default_ssh_key_type: rsa
 
+# Default home directory permissions
+default_home_mode: '755'
+
 # List of groups to manage
 group_list: []
 

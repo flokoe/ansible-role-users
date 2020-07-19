@@ -40,6 +40,7 @@ None
 | `default_ssh_key_bits`   | `2048`      | Default SSH key bits                                                                                                                                                      |
 | `default_ssh_key_type`   | `rsa`       | Default SSH key type                                                                                                                                                      |
 | `skeleton_path`          | None        | Home skeleton directory                                                                                                                                                   |
+| `default_home_mode`      | `755`      | Default home directory permissions                                                                                                                                        |
 
 ### Managing groups
 
@@ -79,6 +80,9 @@ The following variables can be used to create a user:
 | `append`             | `false`                                    | Use groups in `groups` exclusively. Set to true to keep existing groups. See `keep_existing_groups` for global setting                                                            |
 | `home`               | `home_base_path + name`                    | Path to home directory of user                                                                                                                                                    |
 | `create_home`        | `true`                                     | Create home directory                                                                                                                                                             |
+| `home_mode`          | `default_home_mode`                        | Sets users's home directory permissions. Uses permissions specified in `default_home_mode` by default                                                                             |
+| `home_owner`         | `name`                                     | Sets owner of home directory. Will use `name` of user by default.                                                                                                                 |
+| `home_group`         | `name`                                     | Sets group of home directory. Will use `name` of user by default. Uses `users_group.name` if `use_global_users_group` is set to true or `group` if specified                      |
 | `move_home`          | `false`                                    | Attempt to move the user's old home directory to the specified directory if it isn't there already and the old home exists.                                                       |
 | `skeleton`           | None                                       | Home skeleton directory. Uses `skeleton_path` if defined                                                                                                                          |
 | `password`           | None                                       | Password of User. Needs to be an encrypted value                                                                                                                                  |
@@ -109,6 +113,9 @@ user_list:
     append: true
     home: /home/hjanmaat
     create_home: true
+    home_mode: 700
+    home_owner: root
+    home_group: root
     move_home: false
     skeleton: local_skeleton_dir
     password: >-

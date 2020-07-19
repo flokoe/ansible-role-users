@@ -42,3 +42,18 @@
     force: "{{ item.force | default(omit) }}"
     state: "{{ item.state | default('present') }}"
   loop: "{{ user_list }}"
+
+- name: Set users home permissions
+  when:
+    - item.home_create is not defined or item.home_create
+    - item.state is not defined or item.state != 'absent'
+  file:
+    path: "{{ item.home | default(home_base_path + item.name) }}"
+    mode: "{{ item.home_mode | default(default_home_mode) }}"
+    owner: "{{ item.home_owner | default(item.name) }}"
+    group: "{{ item.home_group | \
+      default(users_group.name if use_global_users_group else \
+      item.group if item.group is defined else \
+      item.name) }}"
+    state: directory
+  loop: "{{ user_list }}"
