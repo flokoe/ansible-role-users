@@ -87,8 +87,8 @@
       register: ssh_keygen_out
       changed_when: false
       failed_when:
-          - "'2048' not in ssh_keygen_out.stdout"
-          - "'RSA' not in ssh_keygen_out.stdout"
+        - "'2048' not in ssh_keygen_out.stdout"
+        - "'RSA' not in ssh_keygen_out.stdout"
 
     - name: Get id output for 'system_user1'.
       command: id -u system_user1
