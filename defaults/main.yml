@@ -5,7 +5,7 @@
 # instead of creating an individual primary group for each user (same name as username).
 use_global_users_group: false
 
-# Define global users group
+# Define global users group.
 users_group:
   name: users
 
@@ -14,26 +14,26 @@ users_group:
 # Global setting to keep existing groups:
 keep_existing_groups: false
 
-# Default home base path
+# Default home base path. Needs trailing slash '/'.
 home_base_path: /home/
 
-# Default shell
+# Default shell.
 default_shell: /bin/bash
 
-# Default ssh key bits
+# Default ssh key bits.
 default_ssh_key_bits: 2048
 
-# Default ssh key type
+# Default ssh key type.
 default_ssh_key_type: rsa
 
-# Default home directory permissions
+# Default home directory permissions.
 default_home_mode: '755'
 
 # Default value if authorized_keys should be managed exclusively.
 default_authorized_keys_exclusive: false
 
-# List of groups to manage
+# List of groups to manage.
 group_list: []
 
-# List of users to manage
+# List of users to manage.
 user_list: []
