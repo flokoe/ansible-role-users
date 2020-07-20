@@ -57,3 +57,15 @@
       item.name) }}"
     state: directory
   loop: "{{ user_list }}"
+
+- name: Adding user's authorized keys.
+  when:
+    - item.home_create is not defined or item.home_create
+    - item.state is not defined or item.state != 'absent'
+    - item.authorized_keys is defined
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.authorized_keys | join('\n') }}"
+    exclusive: "{{ item.authorized_keys_exclusive | default(default_authorized_keys_exclusive) }}"
+    state: present
+  loop: "{{ user_list }}"

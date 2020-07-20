@@ -128,3 +128,25 @@
       register: home_perm_out
       failed_when: home_perm_out.changed
       check_mode: true
+
+    - name: Check if 'authorized_keys' for 'user6' exists exclusively.
+      copy:
+        dest: /home/user6/.ssh/authorized_keys
+        group: user6
+        mode: 0600
+        owner: user6
+        src: test_authorized_keys_file
+      register: auth_keys_out
+      failed_when: auth_keys_out.changed
+      check_mode: true
+
+    - name: Check if 'authorized_keys' for 'user7' exists not exclusively.
+      copy:
+        dest: /home/user7/.ssh/authorized_keys
+        group: user7
+        mode: 0600
+        owner: user7
+        src: test_authorized_keys_file2
+      register: auth_keys2_out
+      failed_when: auth_keys2_out.changed
+      check_mode: true

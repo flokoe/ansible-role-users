@@ -30,3 +30,22 @@
         name: user2
         groups: group1
         state: present
+
+    - name: Add 'user6' and 'user7'.
+      user:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - user6
+        - user7
+
+    - name: Add 'authorized_keys' file for 'user6' and 'user7'.
+      authorized_key:
+        user: "{{ item }}"
+        # yamllint disable-line rule:line-length
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCn8srdVDI1izs0uSQVSkFLdkvmlLUrWNVNCqBN5rTnI+BcxMPt1XON7KbhOV31r7bZRmgAraCnfzB9lsznJAFHOeru8tX1RQTn9LJVzp9LPjQgW+FZzi+v+QvNBkZ++ZaEcQyEaMSeeiSI1gSvhSklaf2bSoth8nS28zSUO6fpaFO/sEK4xbXEXf8F8eRA/a8lC3alJql4BMhtzSv3jDPY2Wqx3TDUf9wqQA42lQ8chQdLAejNdc8gyJA5pPPv+4a0An1LPsFqkOLzKPf8mOiq6ddgxa8Nj1fdeF/KUTTqFZNNE5Jg80qLgKHQUaRn5/ugAhR5/hZTsAuseEnOGGMn key3'  # noqa 204
+        exclusive: true
+        state: present
+      loop:
+        - user6
+        - user7
