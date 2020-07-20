@@ -1,6 +1,7 @@
 ---
 
 galaxy_info:
+  role_name: users
   author: Florian Köhler
   description: Ansible role to manage users, groups, authorized keys and sudo entries.
 
