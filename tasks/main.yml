@@ -32,6 +32,7 @@
     expires: "{{ item.expires | default(omit) }}"
     shell: "{{ item.shell | default(default_shell) }}"
     generate_ssh_key: "{{ item.generate_ssh_key | default(omit) }}"
+    ssh_key_file: ".ssh/id_{{ item.ssh_key_type | default(default_ssh_key_type) }}"
     ssh_key_bits: "{{ item.ssh_key_bits | default(default_ssh_key_bits) }}"
     ssh_key_passphrase: "{{ item.ssh_key_passphrase | default(omit) }}"
     ssh_key_type: "{{ item.ssh_key_type | default(default_ssh_key_type) }}"
