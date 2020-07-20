@@ -131,6 +131,10 @@ user_list:
     ssh_key_passphrase: very_secret_secret
     ssh_key_type: rsa
     ssh_key_comment: a comment for ssh key
+    default_authorized_keys_exclusive: true
+    authorized_keys:
+      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGDKKpFlYiNPE7yo/sxcfyTw7Lah5BV2RCvyj2xrkNkUIhbIcLJTaSrawuF/+5wR/qcs3SmEU+5OvdvUohWPQCmaDOWz5RDGiAy1HVh9msim5zeMARkfloBoDyclqmjsULSyEeBeuiiNMfjxacd/2XjPZ7Th7uiyxoguI5F6EWXpsDu4dAAZITjPMXoktG5Zf2no7L/y0+Z49xwoTE59+kJ1gL5XYt8uLMTI53LUL0fcOGoNttG15adj46XriHsB/RsMjetb7br/q1DJnDuIxE7E/Gp/89ZMM0ugkNXx8AzZTmXT25QQ2GvhzMB6TMor12S0BMoQP/lObYx3/VzuxZ key1'
+      - "{{ lookup('file', 'key2.pub') }}"
     system: false
     remove: false
     force: false
