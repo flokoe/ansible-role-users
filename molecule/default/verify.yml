@@ -65,7 +65,7 @@
       failed_when: pass_out.changed
       check_mode: true
 
-    - name: Check if generated ssh key for user4 exists.
+    - name: Check if generated ssh key for 'user4' exists.
       file:
         group: user4
         mode: 0600
@@ -76,13 +76,13 @@
       failed_when: ssh_out.changed
       check_mode: true
 
-    - name: Check content of public ssh key for user4.
+    - name: Check content of public ssh key for 'user4'.
       command: cat /home/user4/.ssh/id_rsa.pub
       register: public_ssh_out
       changed_when: false
       failed_when: "'ansible-generated for user4 on instance' not in public_ssh_out.stdout"
 
-    - name: Check if bits and type of ssh key for user4 are correct.
+    - name: Check if bits and type of ssh key for 'user4' are correct.
       command: ssh-keygen -l -f /home/user4/.ssh/id_rsa
       register: ssh_keygen_out
       changed_when: false
@@ -90,7 +90,7 @@
           - "'2048' not in ssh_keygen_out.stdout"
           - "'RSA' not in ssh_keygen_out.stdout"
 
-    - name: Get id output for system_user1.
+    - name: Get id output for 'system_user1'.
       command: id -u system_user1
       register: id_out
       changed_when: false
