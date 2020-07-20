@@ -1,21 +1,21 @@
 ---
 # tasks file for flokoe.users
 
-- name: Create global 'users_group'
+- name: Create global 'users_group'.
   when: use_global_users_group
   group:
     name: "{{ users_group.name }}"
     gid: "{{ users_group.gid | default(omit) }}"
     state: present
 
-- name: Create groups
+- name: Create groups.
   group:
     name: "{{ item.name }}"
     gid: "{{ item.gid | default(omit) }}"
     state: "{{ item.state | default('present') }}"
   loop: "{{ group_list }}"
 
-- name: Create users
+- name: Create users.
   user:
     name: "{{ item.name }}"
     comment: "{{ item.comment | default(omit) }}"
@@ -44,7 +44,7 @@
     state: "{{ item.state | default('present') }}"
   loop: "{{ user_list }}"
 
-- name: Set users home permissions
+- name: Set user's home permissions.
   when:
     - item.home_create is not defined or item.home_create
     - item.state is not defined or item.state != 'absent'
@@ -59,7 +59,7 @@
     state: directory
   loop: "{{ user_list }}"
 
-- name: Adding user's authorized keys.
+- name: Add user's authorized keys.
   when:
     - item.home_create is not defined or item.home_create
     - item.state is not defined or item.state != 'absent'

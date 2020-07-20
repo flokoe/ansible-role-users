@@ -4,7 +4,7 @@
   hosts: all
 
   tasks:
-    - name: Check if 'users_group' exists
+    - name: Check if 'users_group' exists.
       group:
         name: users
         state: present
@@ -12,7 +12,7 @@
       failed_when: users_group_out.changed
       check_mode: true
 
-    - name: Check if group creation works
+    - name: Check if group creation works.
       group:
         name: group2
         gid: 1991
@@ -21,7 +21,7 @@
       failed_when: group_out.changed
       check_mode: true
 
-    - name: Check if user with minimal config and defaults exists
+    - name: Check if user with minimal config and defaults exists.
       user:
         name: hjanmaat
         comment: Hein Janmaat
@@ -33,7 +33,7 @@
       failed_when: min_config_out.changed
       check_mode: true
 
-    - name: Check if setting uid and 'users_group' works
+    - name: Check if setting uid and 'users_group' works.
       user:
         name: user1
         uid: 1337
@@ -43,7 +43,7 @@
       failed_when: uid_out.changed
       check_mode: true
 
-    - name: Check if existing groups are kept
+    - name: Check if existing groups are kept.
       user:
         name: user2
         groups:
@@ -54,7 +54,7 @@
       failed_when: existing_groups_out.changed
       check_mode: true
 
-    - name: Check if password and non unique uid works
+    - name: Check if password and non unique uid works.
       user:
         name: user3
         uid: 33
@@ -65,7 +65,7 @@
       failed_when: pass_out.changed
       check_mode: true
 
-    - name: Check if generated ssh key for user4 exists
+    - name: Check if generated ssh key for user4 exists.
       file:
         group: user4
         mode: 0600
@@ -76,33 +76,33 @@
       failed_when: ssh_out.changed
       check_mode: true
 
-    - name: Check content of public ssh key for user4
+    - name: Check content of public ssh key for user4.
       command: cat /home/user4/.ssh/id_rsa.pub
       register: public_ssh_out
       changed_when: false
       failed_when: "'ansible-generated for user4 on instance' not in public_ssh_out.stdout"
 
-    - name: Get output of 'ssh-keygen' for '/home/user4/.ssh/id_rsa'
+    - name: Get output of 'ssh-keygen' for '/home/user4/.ssh/id_rsa'.
       command: ssh-keygen -l -f /home/user4/.ssh/id_rsa
       register: ssh_keygen_out
       changed_when: false
 
-    - name: Check if bits and type of ssh key for user4 are correct
+    - name: Check if bits and type of ssh key for user4 are correct.
       assert:
         that:
           - "'2048' in ssh_keygen_out.stdout"
           - "'RSA' in ssh_keygen_out.stdout"
 
-    - name: Get id output for system_user1
+    - name: Get id output for system_user1.
       command: id -u system_user1
       register: id_out
       changed_when: false
 
-    - name: Check if creation of system user was successful
+    - name: Check if creation of system user was successful.
       assert:
         that: id_out.stdout | int < 1000
 
-    - name: Check if user 'foo' is absent
+    - name: Check if user 'foo' is absent.
       user:
         name: foo
         state: absent
@@ -110,7 +110,7 @@
       failed_when: user_foo_out.changed
       check_mode: true
 
-    - name: Check if home dir of 'foo' is absent
+    - name: Check if home dir of 'foo' is absent.
       file:
         path: /home/foo
         state: absent
@@ -118,7 +118,7 @@
       failed_when: home_absent_out.changed
       check_mode: true
 
-    - name: Check if home dir of 'user5' has correct permissions
+    - name: Check if home dir of 'user5' has correct permissions.
       file:
         group: root
         mode: 0700
