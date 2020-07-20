@@ -12,8 +12,14 @@ lint: |
   ansible-lint
 
 platforms:
-  - name: instance
+  - name: ubuntu-bionic
+    hostname: instance
     image: geerlingguy/docker-ubuntu1804-ansible
+    pre_build_image: true
+
+  - name: ubuntu-focal
+    hostname: instance
+    image: geerlingguy/docker-ubuntu2004-ansible
     pre_build_image: true
 
 provisioner:
