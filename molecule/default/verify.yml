@@ -82,16 +82,13 @@
       changed_when: false
       failed_when: "'ansible-generated for user4 on instance' not in public_ssh_out.stdout"
 
-    - name: Get output of 'ssh-keygen' for '/home/user4/.ssh/id_rsa'.
+    - name: Check if bits and type of ssh key for user4 are correct.
       command: ssh-keygen -l -f /home/user4/.ssh/id_rsa
       register: ssh_keygen_out
       changed_when: false
-
-    - name: Check if bits and type of ssh key for user4 are correct.
-      assert:
-        that:
-          - "'2048' in ssh_keygen_out.stdout"
-          - "'RSA' in ssh_keygen_out.stdout"
+      failed_when:
+          - "'2048' not in ssh_keygen_out.stdout"
+          - "'RSA' not in ssh_keygen_out.stdout"
 
     - name: Get id output for system_user1.
       command: id -u system_user1
