@@ -23,6 +23,7 @@ galaxy_info:
     - groups
     - authorized_keys
     - sudo
+    - sudoers
     - management
 
 dependencies: []
