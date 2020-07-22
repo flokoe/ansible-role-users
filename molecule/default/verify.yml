@@ -147,3 +147,27 @@
       register: auth_keys2_out
       failed_when: auth_keys2_out.changed
       check_mode: true
+
+    - name: Ensure that sudo config for group 'test_sudo_group' exists
+      template:
+        src: roles/flokoe.users/templates/sudo_config_group.j2
+        dest: /etc/sudoers.d/group_test_sudo_group
+        owner: root
+        group: root
+        mode: '440'
+        validate: /usr/sbin/visudo -csf %s
+      register: test_sudo_group_out
+      failed_when: test_sudo_group_out.changed
+      check_mode: true
+
+    - name: Ensure that sudo config for user 'user8' exists
+      template:
+        src: roles/flokoe.users/templates/sudo_config_user.j2
+        dest: /etc/sudoers.d/user_user8
+        owner: root
+        group: root
+        mode: '440'
+        validate: /usr/sbin/visudo -csf %s
+      register: sudo_user8_out
+      failed_when: sudo_user8_out.changed
+      check_mode: true

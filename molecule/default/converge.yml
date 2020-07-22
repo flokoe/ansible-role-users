@@ -7,7 +7,12 @@
     group_list:
       - name: group2
         gid: 1991
-
+      - name: test_sudo_group
+        sudo:
+          - host: ALL
+            user: ALL
+            flags: 'NOPASSWD:'
+            actions: ALL
     user_list:
       - name: hjanmaat
         comment: Hein Janmaat
@@ -32,6 +37,12 @@
       - name: user7
         authorized_keys:
           - "{{ lookup('file', 'key2.pub') }}"
+      - name: user8
+        sudo:
+          - host: ALL
+            user: ALL
+            flags: 'NOPASSWD:'
+            actions: ALL
 
   roles:
     - role: flokoe.users
