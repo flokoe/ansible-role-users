@@ -1,0 +1,5 @@
+# Ansible managed. Based on template from flokoe.users role.
+
+{% for entrie in item.sudo %}
+%{{ item.name }} {{ entrie.host }}=({{ entrie.user }}) {{ entrie.flags }} {{ entrie.actions }}
+{% endfor %}

@@ -49,11 +49,16 @@ Add a `group_list` variable containing the list of groups to add.
 
 The following variables can be used to create a group:
 
-| Parameter         | Defaults    | Description                                                      |
-| ----------------- | ----------- | ---------------------------------------------------------------- |
-| `name` *required* | None        | Name of group to create.                                         |
-| `gid`             | None        | Group ID, will be determined automatically if omitted.           |
-| `state`           | `'present'` | State of the group. Set to `absent` to remove group from system. |
+| Parameter             | Defaults    | Description                                                      |
+| --------------------- | ----------- | ---------------------------------------------------------------- |
+| `name` *required*     | None        | Name of group to create.                                         |
+| `gid`                 | None        | Group ID, will be determined automatically if omitted.           |
+| `state`               | `'present'` | State of the group. Set to `absent` to remove group from system. |
+| `sudo`                | None        | List of sudo entries that should exist for this group.           |
+| `sudo.$ENTRY.host`    | None        | Host on which an action should be allowed.                       |
+| `sudo.$ENTRY.user`    | None        | User that should be used to execute an action.                   |
+| `sudo.$ENTRY.flags`   | None        | Flags that should be used. For example `NOPASSWD:`.              |
+| `sudo.$ENTRY.actions` | None        | Aliases or commands that the group is allowed to execute.        |
 
 #### Group example
 
@@ -61,6 +66,13 @@ The following variables can be used to create a group:
 group_list:
   - name: group1
     gid: 1337
+    sudo:
+      # Generates a file called 'group_$GROUPNAME' with the following content:
+      # %$GROUPNAME ALL=(ALL) NOPASSWD: /usr/sbin/visudo
+      - host: ALL
+        user: ALL
+        flags: 'NOPASSWD:'
+        actions: /usr/sbin/visudo
     state: absent
 ```
 
@@ -97,6 +109,11 @@ The following variables can be used to create a user:
 | `ssh_key_comment`           | `'ansible-generated for $USER on $HOSTNAME'` | Sets comment for SSH key.                                                                                                                                                         |
 | `authorized_keys_exclusive` | `default_authorized_keys_exclusive`          | If authorized_keys file should be managed exclusively. Uses value of `default_authorized_keys_exclusive` by default.                                                              |
 | `authorized_keys`           | None                                         | List of keys. Item can be a string (entire key: options, key, comment) or reading a key file: `"{{ lookup('file', 'key_file.pub') }}"`.                                           |
+| `sudo`                      | None                                         | List of sudo entries that should exist for this user.                                                                                                                             |
+| `sudo.$ENTRY.host`          | None                                         | Host on which an action should be allowed.                                                                                                                                        |
+| `sudo.$ENTRY.user`          | None                                         | User that should be used to execute an action.                                                                                                                                    |
+| `sudo.$ENTRY.flags`         | None                                         | Flags that should be used. For example `NOPASSWD:`.                                                                                                                               |
+| `sudo.$ENTRY.actions`       | None                                         | Aliases or commands that the user is allowed to execute.                                                                                                                          |
 | `system`                    | `false`                                      | When creating an account makes the user a system account. This setting cannot be changed on existing users.                                                                       |
 | `remove`                    | `false`                                      | This only affects `state=absent`, removes home directory and mail spool.                                                                                                          |
 | `force`                     | `false`                                      | This only affects `state=absent`, it forces removal of the user and associated directories. When used with `generate_ssh_key=true` this forces an existing key to be overwritten. |
@@ -135,6 +152,13 @@ user_list:
     authorized_keys:
       - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGDKKpFlYiNPE7yo/sxcfyTw7Lah5BV2RCvyj2xrkNkUIhbIcLJTaSrawuF/+5wR/qcs3SmEU+5OvdvUohWPQCmaDOWz5RDGiAy1HVh9msim5zeMARkfloBoDyclqmjsULSyEeBeuiiNMfjxacd/2XjPZ7Th7uiyxoguI5F6EWXpsDu4dAAZITjPMXoktG5Zf2no7L/y0+Z49xwoTE59+kJ1gL5XYt8uLMTI53LUL0fcOGoNttG15adj46XriHsB/RsMjetb7br/q1DJnDuIxE7E/Gp/89ZMM0ugkNXx8AzZTmXT25QQ2GvhzMB6TMor12S0BMoQP/lObYx3/VzuxZ key1'
       - "{{ lookup('file', 'key2.pub') }}"
+    sudo:
+      # Generates a file called 'user_$USERNAME' with the following content:
+      # $USERNAME ALL=(ALL) NOPASSWD: /usr/sbin/visudo
+      - host: ALL
+        user: ALL
+        flags: 'NOPASSWD:'
+        actions: /usr/sbin/visudo
     system: false
     remove: false
     force: false

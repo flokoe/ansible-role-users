@@ -70,3 +70,30 @@
     exclusive: "{{ item.authorized_keys_exclusive | default(default_authorized_keys_exclusive) }}"
     state: present
   loop: "{{ user_list }}"
+
+- name: Add sudo entries for groups
+  when:
+    - item.state is not defined or item.state != 'absent'
+    - item.sudo is defined
+  template:
+    src: sudo_config_group.j2
+    dest: "/etc/sudoers.d/group_{{ item.name }}"
+    owner: root
+    group: root
+    mode: '440'
+    validate: /usr/sbin/visudo -csf %s
+  loop: "{{ group_list }}"
+  tags: sudo_config_group
+
+- name: Add sudo entries for users
+  when:
+    - item.state is not defined or item.state != 'absent'
+    - item.sudo is defined
+  template:
+    src: sudo_config_user.j2
+    dest: "/etc/sudoers.d/user_{{ item.name }}"
+    owner: root
+    group: root
+    mode: '440'
+    validate: /usr/sbin/visudo -csf %s
+  loop: "{{ user_list }}"
